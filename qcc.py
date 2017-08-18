@@ -1,13 +1,26 @@
 import urllib.request
 import re
 import json
+import urllib.parse
 from bs4 import BeautifulSoup
+import pymysql
 
 reg_money = r'注册资本：?(\S*)</span>'
 reg_time = r''
 reg_phone = r''
 reg_email = r''
 reg_address = r''
+
+# db = pymysql.connect('localhost', 'czlyj', '123546', 'CZLYJDB')
+
+
+# sql = """CREATE TABLE EMPLOYEE (
+#          FIRST_NAME  CHAR(20) NOT NULL,
+#          LAST_NAME  CHAR(20),
+#          AGE INT,
+#          SEX CHAR(1),
+#          INCOME FLOAT )"""
+
 
 
 def htmlDownload(url, headers={}):
@@ -59,14 +72,17 @@ def HtmlParse(html, mode="lxml"):
         address = p_list[2].get_text().strip()
         print(address)
 
-        # 经营范围
-        range = p_list[3].get_text()
-        print(range)
+        # # 经营范围
+        # range = p_list[3].get_text()
+        # print(range)
 
         # 企业状态
         status_td = td_list[2]
         status = status_td.find("span").get_text()
         print(status)
+
+        # cursor = db.cursor()
+
 
         dict1 = {"company_name": company_name, "legal_name": legal_name, "money": money, "create_time": time,
                  "phone": phone, "email": email, "address": address, "status": status}
@@ -93,9 +109,11 @@ headers = {
 #     'province': 'JS',
 #     'city': '1'
 # }
+
 html = htmlDownload(base_url, headers)
 data = HtmlParse(html)
 j = json.dumps(data)
+str = urllib.parse.unquote(j)
 
-saveToFile(j, "data.json")
+saveToFile(str, "data.json")
 # print(data)
