@@ -11,15 +11,15 @@ from bs4 import BeautifulSoup
 def get_page_content(key, province="JS", city="1", page="1"):
     data = {
         'key': key,
-        'p': page,
-        'province': province,
-        'city': city
+        'page': page,
+        'area.province': province,
+        'area.city': city
     }
     headers = {
         'User-Agent': USER_AGENT,
         'Cookie': COOKIE
     }
-    url = "http://www.qichacha.com/search?" + urllib.parse.urlencode(data)
+    url = "http://www.qixin.com/search?" + urllib.parse.urlencode(data)
     print(url)
     try:
         req = urllib.request.Request(url, None, headers)
@@ -89,9 +89,14 @@ def parse_html_content(html):
 def main():
     p = 0
     for i in range(1):
-        html = get_page_content("建筑", 'JS', '1', str(19))
-        data = parse_html_content(html)
-        mysql.insert(data)
+        html = get_page_content("建筑", '32', '3201', str(19))
+        print(html)
+        f = open("test.html", "wb")
+        f.write(html)
+        f.close()
+        # data = parse_html_content(html)
+        # mysql.insert(data)
+
 
 if __name__ == '__main__':
     main()
