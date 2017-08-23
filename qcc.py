@@ -87,10 +87,10 @@ def parse_html_content(html):
 
 
 def main():
-    p = 0
     for i in range(1):
-        html = get_page_content("建筑", 'JS', '1', str(19))
+        html = get_page_content("建筑", 'JS', '1', str(i))
         data = parse_html_content(html)
+
         mysql.insert(data)
 
 if __name__ == '__main__':

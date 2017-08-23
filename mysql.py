@@ -1,6 +1,6 @@
 import pymysql
 
-db = pymysql.connect('127.0.0.1', 'root', '123546', 'czlyj', charset='utf8', use_unicode=True)
+db = pymysql.connect('127.0.0.1', 'root', '123546', 'database')
 
 cursor = db.cursor()
 create_sql = """CREATE TABLE MSG (
@@ -11,6 +11,8 @@ create_sql = """CREATE TABLE MSG (
          phone CHAR(25),  
          email CHAR(48),  
          address CHAR(100))"""
+
+# cursor.execute(create_sql)
 
 insert_sql = """INSERT INTO msg(company_name,legal_name, register_money, create_time, phone,email,address,status) 
 VALUES 
