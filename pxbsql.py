@@ -1,6 +1,6 @@
 import pymysql
 
-db = pymysql.connect('127.0.0.1', 'root', '123546', 'czlyj', charset='utf8', use_unicode=True)
+db = pymysql.connect('127.0.0.1', 'root', '123546', 'database', charset='utf8', use_unicode=True)
 
 cursor = db.cursor()
 create_sql = """CREATE TABLE pxb (

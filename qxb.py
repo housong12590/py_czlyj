@@ -50,8 +50,8 @@ def parse_html_content(html):
 
 def main():
     p = 0
-    for i in range(54, 500):
-        html = get_page_content("食品", '32', '3201', str(i))
+    for i in range(1, 500):
+        html = get_page_content("饰品", '32', '3201', str(i))
         data = parse_html_content(html)
 
         pxbsql.insert(data)
