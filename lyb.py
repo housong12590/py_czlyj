@@ -634,7 +634,7 @@ class script:
         time.sleep(0.11)
         self.personalData()
         time.sleep(0.11)
-        self.date()
+        # self.date()
 
         with open('account/%s.txt' % self.account, 'w', encoding='utf-8') as f:
             for key in self.info:
@@ -646,7 +646,7 @@ class script:
 import sys
 
 if __name__ == '__main__':
-    for i in range(10):
-        account = '11%010d@qq.com' % i
+    for i in range(102, 103):
+        account = '11%04d@qq.com' % i
         s = script(account)
         s.main()
