@@ -651,7 +651,7 @@ if __name__ == '__main__':
         for item in enumerate(json.load(f)):
             account = '0%03d@qq.com' % item[0]
             name = item[1]
-            if item[0] > 5:
+            if item[0] >= 227:
                 s = script(account, name)
                 s.main()
     print('注册完成')
