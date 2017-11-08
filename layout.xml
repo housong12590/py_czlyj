@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:gravity="center_horizontal">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            style="@style/radioButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="1"
+            android:text="正常作息"/>
+
+        <RadioButton
+            style="@style/radioButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="2"
+            android:text="经常加班"/>
+
+        <RadioButton
+            style="@style/radioButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="3"
+            android:text="经常出差"/>
+
+        <RadioButton
+            style="@style/radioButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="4"
+            android:text="应酬较多"/>
+
+        <RadioButton
+            style="@style/radioButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="5"
+            android:text="轮班制"/>
+    </LinearLayout>
+
+
+</LinearLayout>

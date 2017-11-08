@@ -1,10 +1,57 @@
+# -*- coding: utf-8 -*-
+
 import requests
 import random
 import json
 from urllib import parse
 import time
+import base64
+import os
 
 api = r'http://www.lyb520.com/api/login_api/'
+
+ARR = (7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2)
+LAST = ('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2')
+
+
+def makeNew():
+    u''' 随机生成新的18为身份证号码 '''
+    t = time.localtime()[0]
+    x = '%02d%02d%02d%04d%02d%02d%03d' % (random.randint(10, 99),
+                                          random.randint(1, 99),
+                                          random.randint(1, 99),
+                                          random.randint(t - 80, t - 18),
+                                          random.randint(1, 12),
+                                          random.randint(1, 28),
+                                          random.randint(1, 999))
+    y = 0
+    for i in range(17):
+        y += int(x[i]) * ARR[i]
+
+    return '%s%s' % (x, LAST[y % 11])
+
+
+def get_constellation(month, date):
+    dates = (21, 20, 21, 21, 22, 22, 23, 24, 24, 24, 23, 22)
+    constellations = ("摩羯", "水瓶", "双鱼", "白羊", "金牛", "双子", "巨蟹", "狮子", "处女", "天秤", "天蝎", "射手", "摩羯")
+    if date < dates[month - 1]:
+        return constellations[month - 1]
+    else:
+        return constellations[month]
+
+
+def chinese_zodiac(year):
+    return u'猴鸡狗猪鼠牛虎兔龙蛇马羊'[year % 12]
+
+
+def createPhone():
+    prelist = ["130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "147", "150",
+               "151", "152", "153", "155", "156", "157", "158", "159", "186", "187", "188"]
+    return random.choice(prelist) + "".join(random.choice("0123456789") for i in range(8))
+
+
+def createQQ():
+    return "".join(random.choice("0123456789") for i in range(9))
 
 
 class script:
@@ -22,6 +69,8 @@ class script:
             'email': self.account,
             'password': '111111'
         }
+        self.info[
+            "01"] = "---------------------------------账号信息----------------------------------------"
         self.info['账号'] = self.account
         result = requests.post(api, params)
         self.resp_check(result)
@@ -68,6 +117,8 @@ class script:
     # 个人基本资料
     def profile(self):
         print("profile")
+        self.info[
+            "02"] = "---------------------------------个人资料----------------------------------------"
         self.age = random.randint(18, 45)
         child = random.randint(1, 2)
         if child == 1:
@@ -86,7 +137,7 @@ class script:
 
         # 职位
         jobList = ['', '单位负责人', '高管', '中层管理', '单位职员', '工人', '务农', '自由职业', '其他']
-        job = random.randint(1, 8)
+        job = random.randint(1, 7)
 
         # 宗教信仰
         religionList = ['', '无宗教信仰', '佛教', '基督教', '天主教', '伊斯兰教', '其他宗教']
@@ -112,8 +163,8 @@ class script:
 
         income = random.randint(3000, 30000)
 
-        family = random.randint(1, 4)
         familyList = ['', "独生子女", '2个', '3个', '4个及以上']
+        family = random.randint(1, 4)
         params = {
             'action': 'profile',
             'username': self.account,
@@ -137,11 +188,14 @@ class script:
 
         }
         result = requests.post(api, params)
+        self.info['年龄'] = self.age
+        self.info['体重'] = weight
+        self.info['身高'] = self.height
+        self.info['月收入'] = income
         self.info['住房情况'] = housingList[housing]
         self.info['职位'] = jobList[job]
         self.info['宗教信仰'] = religionList[religion]
         self.info['作息时间'] = scheduleList[schedule]
-        self.info['体重'] = weight
         self.info['是否愿意去对方城市'] = willingtocityList[willingtocity]
         self.info['教育学历'] = educationalList[educational]
         self.info['家乡'] = '江苏 南京'
@@ -151,6 +205,8 @@ class script:
 
     def spouseInformation(self):
         print("spouseInformation")
+        self.info[
+            "03"] = "---------------------------------择偶要求----------------------------------------"
         if self.g == 1:
             if self.age - 10 < 18:
                 min_age = 18
@@ -219,10 +275,12 @@ class script:
 
     def first_answer(self):
         print("first_answer")
+        self.info[
+            "04"] = "---------------------------------性格特点----------------------------------------"
         with open('answer_first.json', 'r', encoding='utf-8') as f:
             file_list = json.load(f)
             for i in file_list:
-                time.sleep(0.5)
+                time.sleep(0.11)
                 h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -233,19 +291,21 @@ class script:
                     'number': self.index
                 }
                 self.index = self.index + 1
-                self.info[i[1]] = "%d , %d " % (i_answer, h_answer)
+                self.info['.%s' % i[1]] = "%d , %d " % (i_answer, h_answer)
                 result = requests.post(api, params)
                 self.resp_check(result)
             select = random.randint(0, len(file_list) - 1)
-            time.sleep(0.5)
+            time.sleep(0.11)
             self.importantQuestion(1, str(select))
 
     def second_answer(self):
         print("second_answer")
+        self.info[
+            "05"] = "---------------------------------关系互动----------------------------------------"
         with open('answer_second.json', 'r', encoding='utf-8') as f:
             file_list = json.load(f)
             for i in file_list:
-                time.sleep(0.5)
+                time.sleep(0.11)
                 # h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -256,19 +316,21 @@ class script:
                     'number': self.index
                 }
                 self.index = self.index + 1
-                self.info[i[1]] = "%d  " % (i_answer)
+                self.info[',%s' % i[1]] = "%d  " % (i_answer)
                 result = requests.post(api, params)
                 self.resp_check(result)
             select = random.randint(0, len(file_list) - 1)
-            time.sleep(0.5)
+            time.sleep(0.11)
             self.importantQuestion(2, str(select))
 
     def third_answer(self):
         print("third_answer")
+        self.info[
+            "06"] = "---------------------------------人生价值观一----------------------------------------"
         with open('answer_third.json', 'r', encoding='utf-8') as f:
             file_list = json.load(f)
             for i in file_list:
-                time.sleep(0.5)
+                time.sleep(0.11)
                 # h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -279,19 +341,21 @@ class script:
                     'number': self.index
                 }
                 self.index = self.index + 1
-                self.info[i[1]] = "%d  " % (i_answer)
+                self.info['`%s' % i[1]] = "%d  " % (i_answer)
                 result = requests.post(api, params)
                 self.resp_check(result)
             select = random.randint(0, len(file_list) - 1)
-            time.sleep(0.5)
+            time.sleep(0.11)
             self.importantQuestion(3, str(select))
 
     def four_answer(self):
         print("four_answer")
         with open('answer_four.json', 'r', encoding='utf-8') as f:
             file_list = json.load(f)
+            self.info[
+                '07'] = "---------------------------------人生价值观二----------------------------------------"
             for i in file_list:
-                time.sleep(0.5)
+                time.sleep(0.11)
                 # h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -302,14 +366,16 @@ class script:
                     'number': self.index
                 }
                 self.index = self.index + 1
-                self.info[i[1]] = "%d  " % (i_answer)
+                self.info['!%s' % i[1]] = "%d  " % (i_answer)
                 result = requests.post(api, params)
                 self.resp_check(result)
             select = random.randint(0, len(file_list) - 1)
-            time.sleep(0.5)
+            time.sleep(0.11)
             self.importantQuestion(4, str(select))
 
     def importantQuestion(self, type, select):
+        # self.info[
+        #     select] = "---------------------------------重点题----------------------------------------"
         print("importantQuestion")
         params = {
             'action': 'importantQuestion',
@@ -322,110 +388,268 @@ class script:
 
     def hobby(self):
         print("hobby")
+
+        anjingList = ["读书", "听音乐", "看报", "品茶", "乐器", "烹饪", "手工制作", "游戏", "收藏", "看电视", "网络分享", "咖啡",
+                      "写作", "书法绘画"]
+        anjing = self.content(anjingList)
+
+        foodList = ["清淡", "偏咸", "偏辣", "素食", "鱼", "不忌口", "偏甜", "偏麻", "偏酸", "肉食", "海鲜", "都行",
+                    "网上购物"]
+        food = self.content(foodList)
+
+        zuoxishijianList = ["早睡早起", "夜猫子", "睡得较晚", "没规律"]
+        zuoxishijian = zuoxishijianList[random.randint(0, 3)]
+
+        xiuxianList = ["园艺", "跳舞", "朋友聚会", "下棋", "听音乐会", "看球赛", "动物园", "图书馆", "展会", "钓鱼", "志愿者活动",
+                       "美食", "唱歌KTV", "打牌", "逛街购物", "看演出", "散步", "游乐场", "博物馆", "教堂", "摄影"]
+        xiuxian = self.content(xiuxianList)
+
+        sportsList = ["瑜伽", "健身/跑步", "赛车", "兵乓球", "健美操", "排球", "保龄球", "滑雪/溜冰", "游泳", "单车", "羽毛球",
+                      "网球", "足球", "篮球", "高尔夫", "极限运动"]
+        sports = self.content(sportsList)
+
+        travelList = ["自驾游", "繁华都市", "古迹", "崇山峻岭", "沙漠", "田园风光", "特色小镇", "海边岛屿", "草原"]
+        trave = self.content(travelList)
+
+        petList = ["狗", "鸟", "乌龟", "兔", "猫", "鱼", "鼠"]
+        pet = self.content(petList)
+
         params = {
             'action': 'hobby',
             'username': self.account,
-            'anjing': '读书,收藏',
-            'xiuxian': '园艺,美食',
-            'sports': '瑜伽,游泳',
-            'travel': '自驾游,田园风光',
-            'pet': '狗,猫',
-            'food': '清淡,偏甜',
-            'zuoxishijian': '早睡早起'
+            'anjing': anjing,
+            'xiuxian': xiuxian,
+            'sports': sports,
+            'travel': trave,
+            'pet': pet,
+            'food': food,
+            'zuoxishijian': zuoxishijian
         }
+        self.info[
+            '08'] = "---------------------------------兴趣爱好----------------------------------------"
+        self.info["喜欢安静"] = anjing
+        self.info["户外休闲"] = xiuxian
+        self.info["体育运动"] = sports
+        self.info["喜欢旅游"] = trave
+        self.info["喜欢宠物"] = pet
+        self.info["饮食习惯"] = food
+        self.info["作息时间"] = zuoxishijian
         result = requests.post(api, params)
         self.resp_check(result)
 
     def familychooselist(self):
         print('familychooselist')
+        self.info[
+            '09'] = "---------------------------------家庭背景----------------------------------------"
+
+        childhoodList = ["", "农村", "乡镇", "县城", "地级市", "大都市", "一线城市"]
+
+        jobList = ["", "无固定职业", "务农", "工人", "单位职员", "中层管理", "高管", "单位负责人"]
+
+        economyList = ["", "贫困", "低收入", "工薪", "小资", "中产", "富裕", "富豪"]
+
+        guardianList = ["", "父母", "祖辈", "单亲", "单亲和长辈", "其他"]
+
+        childhood = random.randint(1, 6)
+        economy = random.randint(1, 7)
+        fatherjob = random.randint(1, 7)
+        motherjob = random.randint(1, 7)
+        guardian = random.randint(1, 5)
         params = {
             'action': 'familychooselist',
             'username': self.account,
-            'childhood': '读书,收藏',
-            'economy': '园艺,美食',
-            'fatherjob': '瑜伽,游泳',
-            'motherjob': '自驾游,田园风光',
-            'guardian': '狗,猫'
+            'childhood': childhood,
+            'economy': economy,
+            'fatherjob': fatherjob,
+            'motherjob': motherjob,
+            'guardian': guardian
         }
+        self.info['自幼生活在'] = childhoodList[childhood]
+        self.info['父亲职业'] = jobList[fatherjob]
+        self.info['母亲职业'] = jobList[motherjob]
+        self.info['经济状况'] = economyList[economy]
+        self.info['主要监护人'] = guardianList[guardian]
         result = requests.post(api, params)
         self.resp_check(result)
 
     def familychoose(self):
+        self.info[
+            '10'] = "---------------------------------成长环境----------------------------------------"
         print('familychoose')
-        params = {
-            'action': 'familychoose',
-            'username': self.account,
-            'affection': '读书,收藏',
-            'communicate': '园艺,美食',
-            'upbringing': '瑜伽,游泳',
-            'houswork': '自驾游,田园风光'
-        }
-        result = requests.post(api, params)
-        self.resp_check(result)
+        with open('answer_final.json', 'r', encoding='utf-8') as f:
+            file_list = json.load(f)
+            for i in file_list:
+                affection = ''
+                communicate = ''
+                upbringing = ''
+                houswork = ''
+                if i == '父母感情':
+                    affection = random.randint(1, 7)
+                    self.info[i] = affection
+                elif i == '和监护人的沟通':
+                    communicate = random.randint(1, 7)
+                    self.info[i] = communicate
+                elif i == '家教家规':
+                    upbringing = random.randint(1, 7)
+                    self.info[i] = upbringing
+                elif i == '家务劳动':
+                    houswork = random.randint(1, 7)
+                    self.info[i] = houswork
+                params = {
+                    'action': 'familychoose',
+                    'username': self.account,
+                    'affection': affection,
+                    'communicate': communicate,
+                    'upbringing': upbringing,
+                    'houswork': houswork
+                }
+                result = requests.post(api, params)
+                self.resp_check(result)
 
     def updatephoto(self):
+        self.info[
+            '11'] = "---------------------------------上传照片----------------------------------------"
         print('updatephoto')
+        number = random.randint(3, 9)
+        image_base64 = self.image_to_base64(number)
         params = {
             'action': 'updatephoto',
             'username': self.account,
-            'base64_image_content': '读书,收藏'
+            'base64_image_content': image_base64
         }
         result = requests.post(api, params)
         self.resp_check(result)
 
     def personalData(self):
+        self.info[
+            '12'] = "---------------------------------联系方式----------------------------------------"
         print('personalData')
+        image_base64 = self.image_to_base64(1)
+
+        idcard = makeNew()
+        year = idcard[6:10]
+        month = idcard[10:12]
+        day = idcard[12:14]
+        birthday = '%s-%s-%s' % (year, month, day)
+        xinzuo = get_constellation(int(month), int(day))
+        shuxiang = chinese_zodiac(int(year))
+        telephone = createPhone()
+        qq = createQQ()
         params = {
             'action': 'personalData',
             'username': self.account,
-            'idphoto': '读书,收藏',
-            'birthday': '读书,收藏',
-            'email': '读书,收藏',
-            'qq': '读书,收藏',
-            'mobile': '读书,收藏',
-            'telephone': '读书,收藏',
-            'xinzuo': '读书,收藏',
-            'shuxiang': '读书,收藏',
-            'idcardnr': '读书,收藏',
-            'name': '读书,收藏',
+            'idphoto': image_base64,
+            'birthday': birthday,
+            'email': str(self.account),
+            'qq': str(qq),
+            'mobile': str(telephone),
+            'telephone': str(telephone),
+            'xinzuo': xinzuo,
+            'shuxiang': shuxiang,
+            'idcardnr': str(idcard),
+            'name': self.account,
+        }
+        self.info['身份证号'] = idcard
+        self.info['生日'] = birthday
+        self.info['邮箱'] = self.account
+        self.info['QQ'] = qq
+        self.info['电话号码'] = telephone
+        self.info['星座'] = xinzuo
+        self.info['名字'] = self.account
+        self.info['属相'] = shuxiang
+        result = requests.post(api, params)
+        self.resp_check(result)
+
+    def date(self):
+        params = {
+            'action': 'date',
+            'username': self.account
         }
         result = requests.post(api, params)
         self.resp_check(result)
 
+    def image_to_base64(self, number):
+        image_path = r'%s\image' % os.getcwd()
+        image_base64 = ''
+        image_list = os.listdir(image_path)
+        for i in [random.randint(0, len(image_list) - 1) for _ in range(number)]:
+            p = os.path.join(image_path, image_list[i])
+            print(p)
+            self.info[p] = ' ~'
+            with open(p, 'rb') as f:
+                image_base64 += '%s&' % str(base64.b64encode(f.read()), encoding='utf-8')
+        return image_base64[:len(image_base64) - 1]
+
     def resp_check(self, result):
         print(parse.unquote(result.request.body))
         print(result.text)
-        if result.json()['res'] == 0:
-            return True
-        else:
-            raise Exception(result.url)
+        try:
+            j = result.json()
+            if j['res'] == 0:
+                return True
+            else:
+                print(result.url, "-------------------请求重试-------------------------")
+                result = requests.post(api, result.request.body)
+                self.resp_check(result)
+                return False
+        except Exception as e:
+            print(e)
+
+            # raise Exception(result.url)
+
+    def content(self, list):
+        r = random.randint(1, 2)
+        anjing = ''
+        for i in set(random.randint(0, len(list) - 1) for _ in range(r)):
+            anjing += '%s,' % list[i]
+        return anjing[0: len(anjing) - 1]
 
     def main(self):
-        time.sleep(0.5)
+        time.sleep(0.11)
         self.register()
-        time.sleep(0.5)
+        time.sleep(0.11)
         self.gender()
-        time.sleep(0.5)
+        time.sleep(0.11)
         self.marital()
-        time.sleep(0.5)
+        time.sleep(0.11)
         self.profile()
-        time.sleep(0.5)
+        time.sleep(0.11)
         self.spouseInformation()
-        time.sleep(0.5)
+        time.sleep(0.11)
         self.first_answer()
-        time.sleep(0.5)
+        time.sleep(0.11)
         self.second_answer()
-        time.sleep(0.5)
+        time.sleep(0.11)
         self.third_answer()
-        time.sleep(0.5)
+        time.sleep(0.11)
         self.four_answer()
+        time.sleep(0.11)
+        self.hobby()
+        time.sleep(0.11)
+        self.familychooselist()
+        time.sleep(0.11)
+        self.familychoose()
+        time.sleep(0.11)
+        self.updatephoto()
+        time.sleep(0.11)
+        self.personalData()
+        time.sleep(0.11)
+        self.date()
+
+        with open('account/%s.txt' % self.account, 'w', encoding='utf-8') as f:
+            for key in self.info:
+                f.write('%s  %s \n' % (key, self.info[key]))
 
 
 # print(register('20171142@qq.com'))
 
+import sys
+
 if __name__ == '__main__':
-    s = script('11012@qq.com')
+    # for i in range(1):
+    s = script('11807@qq.com')
     s.main()
+    # print(os.getcwd())
     # print('%d,%d' % (20 - 10, 20 - 3))
     # with open('answer_first.json', 'r', encoding='utf-8') as f:
     #     for i in json.load(f):
