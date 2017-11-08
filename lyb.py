@@ -121,7 +121,7 @@ class script:
         print("profile")
         self.info[
             "02"] = "---------------------------------个人资料----------------------------------------"
-        self.age = random.randint(18, 45)
+        self.age = random.randint(18, 32)
         child = random.randint(1, 2)
         if child == 1:
             child_follow = random.randint(0, 1)
@@ -139,15 +139,15 @@ class script:
 
         # 职位
         jobList = ['', '单位负责人', '高管', '中层管理', '单位职员', '工人', '务农', '自由职业', '其他']
-        job = random.randint(1, 7)
+        job = random.randint(3, 6)
 
         # 宗教信仰
         religionList = ['', '无宗教信仰', '佛教', '基督教', '天主教', '伊斯兰教', '其他宗教']
-        religion = random.randint(1, 6)
+        religion = random.randint(1, 5)
 
         # 作息时间
         scheduleList = ['', '正常作息', '经常加班', '经常出差', '应酬较多', '轮班制']
-        schedule = random.randint(1, 5)
+        schedule = random.randint(1, 4)
 
         # 体重
         if self.g == 1:
@@ -163,7 +163,7 @@ class script:
         educationalList = ['', '博士(及以上)', '硕士', '本科', '大专', '高中(中专)', '初中(及以下)']
         educational = random.randint(1, 6)
 
-        income = random.randint(3000, 30000)
+        income = random.randint(3000, 20000)
 
         familyList = ['', "独生子女", '2个', '3个', '4个及以上']
         family = random.randint(1, 4)
