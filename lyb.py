@@ -55,23 +55,25 @@ def createQQ():
 
 
 class script:
-    def __init__(self, account):
+    def __init__(self, account, name):
         self.account = account
         self.info = {}
         self.index = 2
+        self.name = name
 
     # 注册
     def register(self, ):
         print("register")
         params = {
             'action': 'adduserinfo',
-            'account': self.account,
+            'account': self.name,
             'email': self.account,
             'password': '111111'
         }
         self.info[
             "01"] = "---------------------------------账号信息----------------------------------------"
         self.info['账号'] = self.account
+        self.info['姓名'] = self.name
         result = requests.post(api, params)
         self.resp_check(result)
 
@@ -280,7 +282,7 @@ class script:
         with open('answer_first.json', 'r', encoding='utf-8') as f:
             file_list = json.load(f)
             for i in file_list:
-                time.sleep(0.11)
+                time.sleep(0.001)
                 h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -294,8 +296,8 @@ class script:
                 self.info['.%s' % i[1]] = "%d , %d " % (i_answer, h_answer)
                 result = requests.post(api, params)
                 self.resp_check(result)
-            select = random.randint(0, len(file_list) - 1)
-            time.sleep(0.11)
+            select = random.randint(1, len(file_list) - 1)
+            time.sleep(0.001)
             self.importantQuestion(1, str(select))
 
     def second_answer(self):
@@ -305,7 +307,7 @@ class script:
         with open('answer_second.json', 'r', encoding='utf-8') as f:
             file_list = json.load(f)
             for i in file_list:
-                time.sleep(0.11)
+                time.sleep(0.001)
                 # h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -319,8 +321,8 @@ class script:
                 self.info[',%s' % i[1]] = "%d  " % (i_answer)
                 result = requests.post(api, params)
                 self.resp_check(result)
-            select = random.randint(0, len(file_list) - 1)
-            time.sleep(0.11)
+            select = random.randint(1, len(file_list) - 1)
+            time.sleep(0.001)
             self.importantQuestion(2, str(select))
 
     def third_answer(self):
@@ -330,7 +332,7 @@ class script:
         with open('answer_third.json', 'r', encoding='utf-8') as f:
             file_list = json.load(f)
             for i in file_list:
-                time.sleep(0.11)
+                time.sleep(0.001)
                 # h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -344,8 +346,8 @@ class script:
                 self.info['`%s' % i[1]] = "%d  " % (i_answer)
                 result = requests.post(api, params)
                 self.resp_check(result)
-            select = random.randint(0, len(file_list) - 1)
-            time.sleep(0.11)
+            select = random.randint(1, len(file_list) - 1)
+            time.sleep(0.001)
             self.importantQuestion(3, str(select))
 
     def four_answer(self):
@@ -355,7 +357,7 @@ class script:
             self.info[
                 '07'] = "---------------------------------人生价值观二----------------------------------------"
             for i in file_list:
-                time.sleep(0.11)
+                time.sleep(0.001)
                 # h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -369,8 +371,8 @@ class script:
                 self.info['!%s' % i[1]] = "%d  " % (i_answer)
                 result = requests.post(api, params)
                 self.resp_check(result)
-            select = random.randint(0, len(file_list) - 1)
-            time.sleep(0.11)
+            select = random.randint(1, len(file_list) - 1)
+            time.sleep(0.001)
             self.importantQuestion(4, str(select))
 
     def importantQuestion(self, type, select):
@@ -547,7 +549,7 @@ class script:
             'xinzuo': xinzuo,
             'shuxiang': shuxiang,
             'idcardnr': str(idcard),
-            'name': self.account,
+            'name': self.name,
         }
         self.info['身份证号'] = idcard
         self.info['生日'] = birthday
@@ -605,36 +607,36 @@ class script:
         return anjing[0: len(anjing) - 1]
 
     def main(self):
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.register()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.gender()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.marital()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.profile()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.spouseInformation()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.first_answer()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.second_answer()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.third_answer()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.four_answer()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.hobby()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.familychooselist()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.familychoose()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.updatephoto()
-        time.sleep(0.11)
+        time.sleep(0.001)
         self.personalData()
-        time.sleep(0.11)
-        # self.date()
+        time.sleep(0.001)
+        self.date()
 
         with open('account/%s.txt' % self.account, 'w', encoding='utf-8') as f:
             for key in self.info:
@@ -643,10 +645,13 @@ class script:
 
 # print(register('20171142@qq.com'))
 
-import sys
 
 if __name__ == '__main__':
-    for i in range(102, 103):
-        account = '11%04d@qq.com' % i
-        s = script(account)
-        s.main()
+    with open('name.json', 'r', encoding='utf-8') as f:
+        for item in enumerate(json.load(f)):
+            account = '0%03d@qq.com' % item[0]
+            name = item[1]
+            if item[0] > 5:
+                s = script(account, name)
+                s.main()
+    print('注册完成')
