@@ -646,12 +646,7 @@ class script:
 import sys
 
 if __name__ == '__main__':
-    # for i in range(1):
-    s = script('11807@qq.com')
-    s.main()
-    # print(os.getcwd())
-    # print('%d,%d' % (20 - 10, 20 - 3))
-    # with open('answer_first.json', 'r', encoding='utf-8') as f:
-    #     for i in json.load(f):
-    #         print(i[1])
-    # pass
+    for i in range(10):
+        account = '11%010d@qq.com' % i
+        s = script(account)
+        s.main()
