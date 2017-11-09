@@ -227,23 +227,28 @@ class script:
 
         # 教育程度
         ta_educationList = ["", "不限", "博士(及以上)", "硕士", "本科", "大专", "高中(中专)", "初中(及以下)"]
-        ta_education = random.randint(1, 7)
+        # ta_education = random.randint(1, 7)
+        ta_education = 1
 
         # 住房情况
         ta_housingList = ["", "不限", "有房", "购房按揭中", "和家人同住", "单位宿舍", "租房"]
-        ta_housing = random.randint(1, 6)
+        # ta_housing = random.randint(1, 6)
+        ta_housing = 1
 
         # 地理位置
         ta_locationList = ["不限", "同城", "同乡", "同省", "国内"]
-        ta_location = random.randint(0, 4)
+        # ta_location = random.randint(0, 4)
+        ta_location = 0
 
         # 婚姻状况
         ta_maritalList = ["不限", "未婚", "离异", "丧偶"]
-        ta_marital = random.randint(0, 3)
+        # ta_marital = random.randint(0, 3)
+        ta_marital = 0
 
         # 信仰范围
         ta_religionList = ["", "不限", "无宗教信仰", "佛教", "基督教", "天主教", "伊斯兰教", "其他宗教"]
-        ta_religion = random.randint(1, 7)
+        # ta_religion = random.randint(1, 7)
+        ta_religion = 1
 
         # 是否接受他有小孩
         ta_childList = ["", "是", "否", "视情况而定"]
@@ -282,7 +287,6 @@ class script:
         with open('answer_first.json', 'r', encoding='utf-8') as f:
             file_list = json.load(f)
             for i in file_list:
-                time.sleep(0.001)
                 h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -297,7 +301,7 @@ class script:
                 result = requests.post(api, params)
                 self.resp_check(result)
             select = random.randint(1, len(file_list) - 1)
-            time.sleep(0.001)
+
             self.importantQuestion(1, str(select))
 
     def second_answer(self):
@@ -307,7 +311,6 @@ class script:
         with open('answer_second.json', 'r', encoding='utf-8') as f:
             file_list = json.load(f)
             for i in file_list:
-                time.sleep(0.001)
                 # h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -322,7 +325,7 @@ class script:
                 result = requests.post(api, params)
                 self.resp_check(result)
             select = random.randint(1, len(file_list) - 1)
-            time.sleep(0.001)
+
             self.importantQuestion(2, str(select))
 
     def third_answer(self):
@@ -332,7 +335,6 @@ class script:
         with open('answer_third.json', 'r', encoding='utf-8') as f:
             file_list = json.load(f)
             for i in file_list:
-                time.sleep(0.001)
                 # h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -347,7 +349,7 @@ class script:
                 result = requests.post(api, params)
                 self.resp_check(result)
             select = random.randint(1, len(file_list) - 1)
-            time.sleep(0.001)
+
             self.importantQuestion(3, str(select))
 
     def four_answer(self):
@@ -357,7 +359,6 @@ class script:
             self.info[
                 '07'] = "---------------------------------人生价值观二----------------------------------------"
             for i in file_list:
-                time.sleep(0.001)
                 # h_answer = random.randint(1, 7)
                 i_answer = random.randint(1, 7)
                 params = {
@@ -372,7 +373,7 @@ class script:
                 result = requests.post(api, params)
                 self.resp_check(result)
             select = random.randint(1, len(file_list) - 1)
-            time.sleep(0.001)
+
             self.importantQuestion(4, str(select))
 
     def importantQuestion(self, type, select):
@@ -526,8 +527,7 @@ class script:
         self.info[
             '12'] = "---------------------------------联系方式----------------------------------------"
         print('personalData')
-        image_base64 = self.image_to_base64(1)
-
+        image_base64 = self.idcrad_ptoto()
         idcard = makeNew()
         year = idcard[6:10]
         month = idcard[10:12]
@@ -570,6 +570,13 @@ class script:
         result = requests.post(api, params)
         self.resp_check(result)
 
+    def idcrad_ptoto(self):
+        image_path = r'%s\image\idcard_photo.jpg' % os.getcwd()
+        with open(image_path, 'rb') as f:
+            image_base64 = '%s' % str(base64.b64encode(f.read()), encoding='utf-8')
+        self.info['身份证照片'] = image_path
+        return image_base64
+
     def image_to_base64(self, number):
         image_path = r'%s\image' % os.getcwd()
         image_base64 = ''
@@ -600,42 +607,42 @@ class script:
             # raise Exception(result.url)
 
     def content(self, list):
-        r = random.randint(1, 2)
+        r = random.randint(1, 5)
         anjing = ''
         for i in set(random.randint(0, len(list) - 1) for _ in range(r)):
             anjing += '%s,' % list[i]
         return anjing[0: len(anjing) - 1]
 
     def main(self):
-        time.sleep(0.001)
+
         self.register()
-        time.sleep(0.001)
+
         self.gender()
-        time.sleep(0.001)
+
         self.marital()
-        time.sleep(0.001)
+
         self.profile()
-        time.sleep(0.001)
+
         self.spouseInformation()
-        time.sleep(0.001)
+
         self.first_answer()
-        time.sleep(0.001)
+
         self.second_answer()
-        time.sleep(0.001)
+
         self.third_answer()
-        time.sleep(0.001)
+
         self.four_answer()
-        time.sleep(0.001)
+
         self.hobby()
-        time.sleep(0.001)
+
         self.familychooselist()
-        time.sleep(0.001)
+
         self.familychoose()
-        time.sleep(0.001)
+
         self.updatephoto()
-        time.sleep(0.001)
+
         self.personalData()
-        time.sleep(0.001)
+
         self.date()
 
         with open('account/%s.txt' % self.account, 'w', encoding='utf-8') as f:
@@ -651,7 +658,9 @@ if __name__ == '__main__':
         for item in enumerate(json.load(f)):
             account = '0%03d@qq.com' % item[0]
             name = item[1]
-            if item[0] >= 227:
+            if item[0] == 3:
                 s = script(account, name)
                 s.main()
+            elif item[0] > 4:
+                break
     print('注册完成')
