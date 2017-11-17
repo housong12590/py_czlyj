@@ -122,17 +122,24 @@ class script:
         self.info[
             "02"] = "---------------------------------个人资料----------------------------------------"
         self.age = random.randint(18, 32)
+        # 是否有小孩
         child = random.randint(1, 2)
+        # child = 1
         if child == 1:
             child_follow = random.randint(0, 1)
+            if child_follow == 0:
+                childText = '有小孩-跟我'
+            else:
+                childText = '有小孩-跟对方'
         else:
             child_follow = ''
+            childText = '没有小孩'
 
         if self.g == 1:  # 男
             self.height = random.randint(160, 185)
         else:
             self.height = random.randint(155, 175)
-
+        self.info['是否有小孩'] = childText
         # 住房情况
         housingList = ['', '有房', '购房按揭中', '和家人同住', '单位宿舍', '租房']
         housing = random.randint(1, 5)
@@ -658,9 +665,9 @@ if __name__ == '__main__':
         for item in enumerate(json.load(f)):
             account = '0%03d@qq.com' % item[0]
             name = item[1]
-            if item[0] == 3:
+            if item[0] == 5:
                 s = script(account, name)
                 s.main()
-            elif item[0] > 4:
+            elif item[0] > 6:
                 break
     print('注册完成')
