@@ -123,8 +123,8 @@ class script:
             "02"] = "---------------------------------个人资料----------------------------------------"
         self.age = random.randint(18, 32)
         # 是否有小孩
-        child = random.randint(1, 2)
-        # child = 1
+        # child = random.randint(1, 2)
+        child = 1
         if child == 1:
             child_follow = random.randint(0, 1)
             if child_follow == 0:
@@ -404,7 +404,8 @@ class script:
         anjing = self.content(anjingList)
 
         foodList = ["清淡", "偏咸", "偏辣", "素食", "鱼", "不忌口", "偏甜", "偏麻", "偏酸", "肉食", "海鲜", "都行",
-                    "网上购物"]
+                    # "网上购物"
+                    ]
         food = self.content(foodList)
 
         zuoxishijianList = ["早睡早起", "夜猫子", "睡得较晚", "没规律"]
@@ -599,17 +600,22 @@ class script:
     def resp_check(self, result):
         print(parse.unquote(result.request.body))
         print(result.text)
-        try:
-            j = result.json()
-            if j['res'] == 0:
-                return True
-            else:
-                print(result.url, "-------------------请求重试-------------------------")
-                result = requests.post(api, result.request.body)
-                self.resp_check(result)
-                return False
-        except Exception as e:
-            print(e)
+        if result.json()['res'] == 0:
+            return True
+        else:
+            raise Exception('请求失败')
+
+            # try:
+            #     j = result.json()
+            #     if j['res'] == 0:
+            #         return True
+            #     else:
+            #         print(result.url, "-------------------请求重试-------------------------")
+            #         result = requests.post(api, result.request.body)
+            #         self.resp_check(result)
+            #         return False
+            # except Exception as e:
+            #     print(e)
 
             # raise Exception(result.url)
 
@@ -646,11 +652,11 @@ class script:
 
         self.familychoose()
 
-        self.updatephoto()
-
-        self.personalData()
-
-        self.date()
+        # self.updatephoto()
+        #
+        # self.personalData()
+        #
+        # self.date()
 
         with open('account/%s.txt' % self.account, 'w', encoding='utf-8') as f:
             for key in self.info:
@@ -665,9 +671,9 @@ if __name__ == '__main__':
         for item in enumerate(json.load(f)):
             account = '0%03d@qq.com' % item[0]
             name = item[1]
-            if item[0] == 5:
+            if item[0] == 23:
                 s = script(account, name)
                 s.main()
-            elif item[0] > 6:
+            elif item[0] > 23:
                 break
     print('注册完成')
