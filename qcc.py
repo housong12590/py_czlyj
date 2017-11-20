@@ -1,9 +1,10 @@
 import requests, re, json
 from urllib import parse
+import time
 
 # from sqlalchemy import Column, String, create_engine
 
-start_url = 'http://www.qichacha.com/search_index?key=%25E9%25A3%259F%25E5%2593%2581&ajaxflag=1&province=JS&city=1&tel=T&statusCode=10&p={0}&'
+start_url = 'http://www.qichacha.com/search_index?key={0}&ajaxflag=1&province=JS&city=1&tel=T&statusCode=10&p={1}&'
 
 headers = {
     'Cookie': '_uab_collina=150997654636256503075966; acw_tc=AQAAAE+qXhOgHAYAWoOVJFgr3NPEsrjb; hasShow=1; _umdata=2FB0BDB3C12E491D898B7FF5457DC6F6606AADC154B339B14C53F2A958190BE2C5CD238CF1989958CD43AD3E795C914CFE9A8D285B7F0C199B6C79561C463266; PHPSESSID=6tgg1i5f3r745c6vtllf036836; zg_did=%7B%22did%22%3A%20%2215f919d60f75c5-0551dfa9556817-5b4a2c1d-1fa400-15f919d60f889f%22%7D; zg_de1d1a35bfa24ce29bbf2c7eb17e6c4f=%7B%22sid%22%3A%201510760876763%2C%22updated%22%3A%201510763801963%2C%22info%22%3A%201510756663973%2C%22superProperty%22%3A%20%22%7B%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22www.qichacha.com%22%2C%22cuid%22%3A%20%225431e87b22de8d2050a3740fc6273ea4%22%7D',
@@ -31,9 +32,11 @@ max_page_regexp = re.compile(r'<span class="text-danger">(\s.*?)\+\s+</span>')
 
 result_list = []
 
-f_text = parse.unquote(requests.get(start_url.format(1), headers=headers).content.decode('utf-8'))
 
-max_page = re.findall(max_page_regexp, f_text)[0].replace(' ', '')
+# f_text = parse.unquote(requests.get(start_url.format(1), headers=headers).content.decode('utf-8'))
+
+
+# max_page = re.findall(max_page_regexp, f_text)[0].replace(' ', '')
 
 
 def get_value(reg, item):
@@ -56,7 +59,6 @@ def get_html_content(url):
 def parse_content(content):
     obj_list = []
     for item in re.findall(item_span_regexp, content):
-        # print(item)
         obj = {
             'q_name': get_value(q_name_regexp, item).replace('<em>', '').replace('</em>', ''),
             'phone': get_value(phone_regexp, item),
@@ -74,7 +76,6 @@ def check_result(list, url):
         temp_list.append(url)
 
 
-
 def xx():
     for url in temp_list:
         content = get_html_content(request_url)
@@ -83,17 +84,28 @@ def xx():
         result_list.extend(ls)
 
 
-if __name__ == '__main__':
-    for index in range(1, int(max_page)):
-        request_url = start_url.format(index)
-        content = get_html_content(request_url)
-        ls = parse_content(content)
-        # check_result(ls, request_url)
-        result_list.extend(ls)
-        # xx()
-    # print(len(result_list))
+def xxx(url):
+    content = get_html_content(url)
+    time.sleep(2)
+    try:
+        re.findall(item_span_regexp, content)[0]
+    except:
+        fid_list.append(url)
+        print(url, '请求失败')
+    ls = parse_content(content)
+    result_list.extend(ls)
 
-    with open('qccresult.json', 'w', encoding='utf-8') as f:
+
+fid_list = []
+
+if __name__ == '__main__':
+    for index in range(1, int(500)):
+        request_url = start_url.format(parse.quote("化妆品"), index)
+        xxx(request_url)
+
+    for url in fid_list:
+        xxx(url)
+    with open('huazhuangping.json', 'w', encoding='utf-8') as f:
         f.write(json.dumps(result_list, ensure_ascii=False))
 
 print(len(result_list))
