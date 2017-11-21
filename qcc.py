@@ -2,12 +2,11 @@ import requests, re, json
 from urllib import parse
 import time
 
-# from sqlalchemy import Column, String, create_engine
 
 start_url = 'http://www.qichacha.com/search_index?key={0}&ajaxflag=1&province=JS&city=1&tel=T&statusCode=10&p={1}&'
 
 headers = {
-    'Cookie': '_uab_collina=150997654636256503075966; acw_tc=AQAAAE+qXhOgHAYAWoOVJFgr3NPEsrjb; hasShow=1; _umdata=2FB0BDB3C12E491D898B7FF5457DC6F6606AADC154B339B14C53F2A958190BE2C5CD238CF1989958CD43AD3E795C914CFE9A8D285B7F0C199B6C79561C463266; PHPSESSID=6tgg1i5f3r745c6vtllf036836; zg_did=%7B%22did%22%3A%20%2215f919d60f75c5-0551dfa9556817-5b4a2c1d-1fa400-15f919d60f889f%22%7D; zg_de1d1a35bfa24ce29bbf2c7eb17e6c4f=%7B%22sid%22%3A%201510760876763%2C%22updated%22%3A%201510763801963%2C%22info%22%3A%201510756663973%2C%22superProperty%22%3A%20%22%7B%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22www.qichacha.com%22%2C%22cuid%22%3A%20%225431e87b22de8d2050a3740fc6273ea4%22%7D',
+    'Cookie': 'acw_tc=AQAAAFM6hW4dhgIAAjtNMdowya/OAXGd; hasShow=1; _uab_collina=151119887507162310001182; _umdata=6AF5B463492A874D84C37624E73A40FEE2C977CE17C22255DD7BF9DF1D28AC1020FF79A36E682A4BCD43AD3E795C914C3E1FD640964304002FAFCE67D91C8AFA; PHPSESSID=l4hmasdfhnjj9u6k6s5l34hus6; zg_did=%7B%22did%22%3A%20%2215fda78c16d362-0a62abb5c6696e-5b4a2c1d-144000-15fda78c16e28a%22%7D; zg_de1d1a35bfa24ce29bbf2c7eb17e6c4f=%7B%22sid%22%3A%201511198867826%2C%22updated%22%3A%201511198940404%2C%22info%22%3A%201511198867830%2C%22superProperty%22%3A%20%22%7B%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22www.baidu.com%22%2C%22cuid%22%3A%20%22db20066dff91ee0bcea40e5e25e99847%22%7D',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36',
     'Upgrade-Insecure-Requests': "1",
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
@@ -99,7 +98,7 @@ def xxx(url):
 fid_list = []
 
 if __name__ == '__main__':
-    for index in range(1, int(500)):
+    for index in range(1, int(11)):
         request_url = start_url.format(parse.quote("化妆品"), index)
         xxx(request_url)
 
