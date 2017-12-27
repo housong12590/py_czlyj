@@ -1,16 +1,29 @@
-import pymysql
+from flask import Flask, url_for
 
-db = pymysql.connect('127.0.0.1', 'root', '123546', 'database', charset='utf8', use_unicode=True)
-
-cursor = db.cursor()
-create_sql = """CREATE TABLE pxb (
-         name  CHAR(255),
-         person  CHAR(255),
-         phone CHAR(255)"""
-
-insert_sql = """INSERT INTO pxb(name,person, phone) VALUES (%s, %s, %s)"""
+app = Flask(__name__)
 
 
-def insert(d):
-    cursor.executemany(insert_sql, d)
-    db.commit()
+@app.route("/", methods=['GET'], endpoint='index1')
+def index():
+    print(url_for('index1'))
+    return "GET"
+
+
+@app.route("/", methods=['POST'], endpoint='index2')
+def index():
+    print(url_for('index2'))
+    return "POST"
+
+
+@app.route('/', methods=['PUI'], endpoint='index3')
+def index():
+    return "PUT"
+
+
+@app.route('/', methods=['DELETE'], endpoint='index4')
+def index():
+    return "DELETE"
+
+
+if __name__ == '__main__':
+    app.run()

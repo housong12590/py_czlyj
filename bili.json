@@ -1,0 +1,30 @@
+{
+  "is_completed": true,
+  "total_bytes": 225533679,
+  "downloaded_bytes": 225533679,
+  "title": "python全栈开发（入门到放弃）",
+  "type_tag": "lua.flv.bili2api.80",
+  "cover": "http:\/\/i0.hdslb.com\/bfs\/archive\/eb8c58ff8ae3b412387da93d9e719465cccfbe2f.jpg",
+  "prefered_video_quality": 400,
+  "guessed_total_bytes": 0,
+  "total_time_milli": 4101135,
+  "danmaku_count": 0,
+  "time_update_stamp": 1509887613280,
+  "time_create_stamp": 1509842298528,
+  "avid": 13690129,
+  "spid": 0,
+  "seasion_id": 0,
+  "page_data": {
+    "cid": 23345948,
+    "page": 187,
+    "from": "vupload",
+    "part": "26-05 python 全栈开发-基础篇-day26 远程执行命令",
+    "link": "",
+    "rich_vid": "",
+    "vid": "",
+    "has_alias": false,
+    "weblink": "",
+    "offsite": "",
+    "tid": 39
+  }
+}
